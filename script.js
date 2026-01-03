@@ -398,6 +398,32 @@ class Monster {
         this.y = y;
         this.isPlayer = isPlayer;
         this.size = 3;
+        this.expression = 'normal'; // normal, hurt, happy, angry
+        this.expressionTimer = 0;
+    }
+
+    takeDamage() {
+        this.expression = 'hurt';
+        this.expressionTimer = 1.0; // Show hurt expression for 1 second
+    }
+
+    celebrate() {
+        this.expression = 'happy';
+        this.expressionTimer = 2.0;
+    }
+
+    getAngry() {
+        this.expression = 'angry';
+        this.expressionTimer = 1.5;
+    }
+
+    update(dt) {
+        if (this.expressionTimer > 0) {
+            this.expressionTimer -= dt;
+            if (this.expressionTimer <= 0) {
+                this.expression = 'normal';
+            }
+        }
     }
 
     draw(ctx) {
@@ -414,21 +440,90 @@ class Monster {
         ctx.lineWidth = 3;
         ctx.stroke();
 
-        // Eyes
-        ctx.fillStyle = 'white';
+        // Draw face based on expression
         const eyeOffset = size * 0.3;
-        const eyeSize = size * 0.3;
-        ctx.beginPath();
-        ctx.arc(screen.x - eyeOffset, screen.y - eyeOffset, eyeSize, 0, Math.PI * 2);
-        ctx.arc(screen.x + eyeOffset, screen.y - eyeOffset, eyeSize, 0, Math.PI * 2);
-        ctx.fill();
+        const eyeSize = size * 0.25;
 
-        ctx.fillStyle = 'black';
-        const pupilSize = eyeSize * 0.5;
-        ctx.beginPath();
-        ctx.arc(screen.x - eyeOffset, screen.y - eyeOffset, pupilSize, 0, Math.PI * 2);
-        ctx.arc(screen.x + eyeOffset, screen.y - eyeOffset, pupilSize, 0, Math.PI * 2);
-        ctx.fill();
+        if (this.expression === 'hurt') {
+            // X eyes
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 3;
+            const xSize = eyeSize * 0.8;
+            // Left X
+            ctx.beginPath();
+            ctx.moveTo(screen.x - eyeOffset - xSize, screen.y - eyeOffset - xSize);
+            ctx.lineTo(screen.x - eyeOffset + xSize, screen.y - eyeOffset + xSize);
+            ctx.moveTo(screen.x - eyeOffset + xSize, screen.y - eyeOffset - xSize);
+            ctx.lineTo(screen.x - eyeOffset - xSize, screen.y - eyeOffset + xSize);
+            // Right X
+            ctx.moveTo(screen.x + eyeOffset - xSize, screen.y - eyeOffset - xSize);
+            ctx.lineTo(screen.x + eyeOffset + xSize, screen.y - eyeOffset + xSize);
+            ctx.moveTo(screen.x + eyeOffset + xSize, screen.y - eyeOffset - xSize);
+            ctx.lineTo(screen.x + eyeOffset - xSize, screen.y - eyeOffset + xSize);
+            ctx.stroke();
+
+            // Frown mouth
+            ctx.beginPath();
+            ctx.arc(screen.x, screen.y + size * 0.3, size * 0.4, 0.2 * Math.PI, 0.8 * Math.PI);
+            ctx.stroke();
+        } else if (this.expression === 'happy') {
+            // Happy eyes (^_^)
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(screen.x - eyeOffset, screen.y - eyeOffset, eyeSize, 0.2 * Math.PI, 0.8 * Math.PI, true);
+            ctx.arc(screen.x + eyeOffset, screen.y - eyeOffset, eyeSize, 0.2 * Math.PI, 0.8 * Math.PI, true);
+            ctx.stroke();
+
+            // Big smile
+            ctx.beginPath();
+            ctx.arc(screen.x, screen.y + size * 0.1, size * 0.5, 0, Math.PI);
+            ctx.stroke();
+        } else if (this.expression === 'angry') {
+            // Angry eyes (>_<)
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(screen.x - eyeOffset, screen.y - eyeOffset, eyeSize, 0, Math.PI * 2);
+            ctx.arc(screen.x + eyeOffset, screen.y - eyeOffset, eyeSize, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Angry eyebrows
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(screen.x - eyeOffset - eyeSize * 1.5, screen.y - eyeOffset - eyeSize);
+            ctx.lineTo(screen.x - eyeOffset + eyeSize * 0.5, screen.y - eyeOffset - eyeSize * 1.5);
+            ctx.moveTo(screen.x + eyeOffset + eyeSize * 1.5, screen.y - eyeOffset - eyeSize);
+            ctx.lineTo(screen.x + eyeOffset - eyeSize * 0.5, screen.y - eyeOffset - eyeSize * 1.5);
+            ctx.stroke();
+
+            // Grumpy mouth
+            ctx.beginPath();
+            ctx.moveTo(screen.x - size * 0.3, screen.y + size * 0.3);
+            ctx.lineTo(screen.x + size * 0.3, screen.y + size * 0.3);
+            ctx.stroke();
+        } else {
+            // Normal eyes
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(screen.x - eyeOffset, screen.y - eyeOffset, eyeSize, 0, Math.PI * 2);
+            ctx.arc(screen.x + eyeOffset, screen.y - eyeOffset, eyeSize, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'black';
+            const pupilSize = eyeSize * 0.6;
+            ctx.beginPath();
+            ctx.arc(screen.x - eyeOffset, screen.y - eyeOffset, pupilSize, 0, Math.PI * 2);
+            ctx.arc(screen.x + eyeOffset, screen.y - eyeOffset, pupilSize, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Normal smile
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(screen.x, screen.y + size * 0.2, size * 0.4, 0, Math.PI);
+            ctx.stroke();
+        }
 
         // Draw aiming arm if it's this monster's turn
         if (game.state === 'playing' &&
