@@ -129,20 +129,18 @@ function resizeCanvas() {
     game.canvas.style.width = displayWidth + 'px';
     game.canvas.style.height = displayHeight + 'px';
 
-    game.width = game.canvas.width;
-    game.height = game.canvas.height;
+    game.width = displayWidth;
+    game.height = displayHeight;
 
     // Calculate scale to fit world
     const scaleX = game.width / CONFIG.WORLD_WIDTH;
     const scaleY = game.height / CONFIG.WORLD_HEIGHT;
-    game.scale = Math.min(scaleX, scaleY) * 0.9;
-
-    game.ctx.setTransform(game.dpr, 0, 0, game.dpr, 0, 0);
+    game.scale = Math.min(scaleX, scaleY) * 0.85;
 }
 
 function worldToScreen(x, y) {
-    const offsetX = (game.width / game.dpr - CONFIG.WORLD_WIDTH * game.scale) / 2;
-    const offsetY = (game.height / game.dpr - CONFIG.WORLD_HEIGHT * game.scale) / 2;
+    const offsetX = (game.width - CONFIG.WORLD_WIDTH * game.scale) / 2;
+    const offsetY = (game.height - CONFIG.WORLD_HEIGHT * game.scale) / 2;
 
     return {
         x: x * game.scale + offsetX + game.screenShake.x,
