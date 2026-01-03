@@ -967,6 +967,9 @@ function setupLevel() {
     game.rock = null;
     game.particles = [];
 
+    // Reset screen shake
+    game.screenShake = { x: 0, y: 0, intensity: 0 };
+
     updateAngleOscillation();
     updatePowerOscillation();
     updateUI();
@@ -1355,8 +1358,10 @@ function nextLevel() {
         game.state = 'victory';
         showScreen('victory-screen');
     } else {
-        game.state = 'playing';
+        // Setup the level BEFORE setting state to playing
+        // This prevents the game loop from processing with old destroyed objects
         setupLevel();
+        game.state = 'playing';
         showScreen(null);
     }
 }
