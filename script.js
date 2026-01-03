@@ -318,6 +318,13 @@ class House {
         if (closestBlock) {
             closestBlock.takeDamage(amount);
             shakeScreen(amount / 50);
+
+            // Make the monster on this house show hurt expression
+            if (this.isPlayer && game.playerMonster) {
+                game.playerMonster.takeDamage();
+            } else if (!this.isPlayer && game.enemyMonster) {
+                game.enemyMonster.takeDamage();
+            }
         }
     }
 
@@ -1118,6 +1125,10 @@ function update(time) {
         requestAnimationFrame(update);
         return;
     }
+
+    // Update monster expressions
+    if (game.playerMonster) game.playerMonster.update(game.deltaTime);
+    if (game.enemyMonster) game.enemyMonster.update(game.deltaTime);
 
     // Update oscillations
     if (game.throwPhase === 'angle' && game.currentTurn === 'player') {
