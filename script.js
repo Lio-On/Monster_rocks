@@ -19,7 +19,7 @@ const CONFIG = {
     WORLD_WIDTH: 120, // meters
     WORLD_HEIGHT: 40, // meters
     GRAVITY: 15, // m/s²
-    ROCK_RADIUS: 0.6, // meters
+    ROCK_RADIUS: 0.8, // meters
     ROCK_MASS: 10, // kg
     BOUNCE_DAMPING: 0.4,
     STOP_VELOCITY_THRESHOLD: 0.5,
@@ -352,8 +352,16 @@ class Obstacle {
         ctx.arc(screen.x, screen.y, r, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.lineWidth = 2;
+        // Add highlight for 3D effect
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.beginPath();
+        ctx.arc(screen.x - r * 0.3, screen.y - r * 0.3, r * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(screen.x, screen.y, r, 0, Math.PI * 2);
         ctx.stroke();
     }
 }
@@ -604,12 +612,20 @@ class Rock {
         const screen = worldToScreen(this.x, this.y);
         const r = this.radius * game.scale;
 
-        ctx.fillStyle = '#555';
+        // Rock with gradient
+        const gradient = ctx.createRadialGradient(
+            screen.x - r * 0.3, screen.y - r * 0.3, r * 0.1,
+            screen.x, screen.y, r
+        );
+        gradient.addColorStop(0, '#777');
+        gradient.addColorStop(1, '#333');
+        ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(screen.x, screen.y, r, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.strokeStyle = '#333';
+        // Border
+        ctx.strokeStyle = '#222';
         ctx.lineWidth = 2;
         ctx.stroke();
     }
