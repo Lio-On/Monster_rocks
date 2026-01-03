@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Monster Rocks - King of Anga</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="rotate-overlay" class="rotate-overlay">
+        <div class="rotate-message">
+            <div class="rotate-icon">📱↻</div>
+            <p>Please rotate your device to landscape</p>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="hud" class="hud hidden">
+            <div class="hud-top">
+                <div class="level-info">Level <span id="level-number">1</span></div>
+                <div class="health-bars">
+                    <div class="health-bar player">
+                        <div class="health-label">Your House</div>
+                        <div class="health-bg">
+                            <div id="player-health" class="health-fill"></div>
+                        </div>
+                    </div>
+                    <div class="health-bar enemy">
+                        <div class="health-label">Enemy House</div>
+                        <div class="health-bg">
+                            <div id="enemy-health" class="health-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="mute-btn" class="icon-btn">🔊</button>
+            </div>
+
+            <div class="hud-middle">
+                <div id="turn-indicator" class="turn-indicator">Your Turn</div>
+                <div id="phase-indicator" class="phase-indicator">Tap to Lock Angle</div>
+            </div>
+        </div>
+
+        <div id="controls" class="controls hidden">
+            <button id="lock-btn" class="game-btn primary">LOCK ANGLE</button>
+            <button id="restart-btn" class="game-btn secondary">RESTART</button>
+        </div>
+
+        <div id="start-screen" class="overlay-screen">
+            <div class="screen-content">
+                <h1 class="game-title">Monster Rocks</h1>
+                <h2 class="game-subtitle">King of Anga</h2>
+                <div class="instructions">
+                    <p><strong>How to Play:</strong></p>
+                    <p>1. Tap to lock the angle</p>
+                    <p>2. Tap again to lock the power</p>
+                    <p>3. Destroy the enemy house!</p>
+                </div>
+                <button id="play-btn" class="game-btn primary large">PLAY</button>
+            </div>
+        </div>
+
+        <div id="level-complete-screen" class="overlay-screen hidden">
+            <div class="screen-content">
+                <h2 class="screen-title">Level Complete!</h2>
+                <p class="screen-message" id="level-complete-message"></p>
+                <button id="next-level-btn" class="game-btn primary large">NEXT LEVEL</button>
+            </div>
+        </div>
+
+        <div id="victory-screen" class="overlay-screen hidden">
+            <div class="screen-content">
+                <h1 class="screen-title">👑 Crowned King of Anga! 👑</h1>
+                <p class="screen-message">You have conquered all challenges!</p>
+                <button id="play-again-btn" class="game-btn primary large">PLAY AGAIN</button>
+            </div>
+        </div>
+
+        <div id="defeat-screen" class="overlay-screen hidden">
+            <div class="screen-content">
+                <h2 class="screen-title">Defeated!</h2>
+                <p class="screen-message">Your house has been destroyed</p>
+                <button id="try-again-btn" class="game-btn primary large">TRY AGAIN</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
