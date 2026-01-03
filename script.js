@@ -924,15 +924,20 @@ function setupLevel() {
 
     // Place houses
     const playerX = 10;
-    const enemyX = CONFIG.WORLD_WIDTH - 20;
+    const enemyX = CONFIG.WORLD_WIDTH - 25;
     const houseY = 5;
 
     game.playerHouse = new House(playerX, houseY, true);
     game.enemyHouse = new House(enemyX, houseY, false);
 
-    // Place monsters
-    game.playerMonster = new Monster(playerX + 3.5, houseY + 7);
-    game.enemyMonster = new Monster(enemyX + 3.5, houseY + 7);
+    // Place monsters ON TOP of houses
+    const playerMonsterX = game.playerHouse.getCenterX();
+    const playerMonsterY = game.playerHouse.getTopY() + 1; // 1 meter above house
+    game.playerMonster = new Monster(playerMonsterX, playerMonsterY, true);
+
+    const enemyMonsterX = game.enemyHouse.getCenterX();
+    const enemyMonsterY = game.enemyHouse.getTopY() + 1;
+    game.enemyMonster = new Monster(enemyMonsterX, enemyMonsterY, false);
 
     // Place obstacles
     game.obstacles = [];
@@ -1012,13 +1017,16 @@ function throwRock() {
     const angle = isPlayer ? game.angle : (180 - game.angle);
     const angleRad = angle * Math.PI / 180;
 
-    const maxSpeed = 30;
+    const maxSpeed = 45; // Increased from 30 for faster, more dynamic gameplay
     const speed = (game.power / 100) * maxSpeed;
 
     const vx = Math.cos(angleRad) * speed;
     const vy = Math.sin(angleRad) * speed;
 
     game.rock = new Rock(monster.x, monster.y, vx, vy);
+
+    // Monster gets angry when throwing
+    monster.getAngry();
 
     playSound('throw', 0.3);
     vibrate(20);
