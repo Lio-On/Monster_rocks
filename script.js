@@ -1011,8 +1011,12 @@ function update(time) {
 
 function render() {
     const ctx = game.ctx;
-    const w = game.width / game.dpr;
-    const h = game.height / game.dpr;
+    const w = game.width;
+    const h = game.height;
+
+    // Scale context for high DPI displays
+    ctx.save();
+    ctx.scale(game.dpr, game.dpr);
 
     // Clear
     ctx.fillStyle = '#87ceeb';
@@ -1073,6 +1077,8 @@ function render() {
     for (const particle of game.particles) {
         particle.draw(ctx);
     }
+
+    ctx.restore();
 }
 
 // ============================================================================
