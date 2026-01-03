@@ -258,14 +258,19 @@ class House {
         this.blocks = [];
         this.maxHp = 0;
 
-        // Build house structure
+        // Build castle structure - bigger and more impressive
         const blockWidth = 2.5;
         const blockHeight = 2;
-        const rows = 3;
-        const cols = 3;
+        const rows = 5; // Taller castle
+        const cols = 4; // Wider castle
 
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
+                // Skip some blocks at top corners for castle shape
+                if (row === rows - 1 && (col === 0 || col === cols - 1)) {
+                    continue; // Create battlements
+                }
+
                 const bx = x + col * blockWidth;
                 const by = y + row * blockHeight;
                 const block = new Block(bx, by, blockWidth, blockHeight, 100);
@@ -273,6 +278,23 @@ class House {
                 this.maxHp += 100;
             }
         }
+    }
+
+    getTopY() {
+        let maxY = this.y;
+        for (const block of this.blocks) {
+            if (!block.destroyed) {
+                const blockTop = block.y + block.height;
+                if (blockTop > maxY) {
+                    maxY = blockTop;
+                }
+            }
+        }
+        return maxY;
+    }
+
+    getCenterX() {
+        return this.x + 5; // Center of castle
     }
 
     takeDamage(amount, impactX, impactY) {
