@@ -363,18 +363,22 @@ class Monster {
         this.x = x;
         this.y = y;
         this.isPlayer = isPlayer;
-        this.size = 2;
+        this.size = 3;
     }
 
     draw(ctx) {
         const screen = worldToScreen(this.x, this.y);
         const size = this.size * game.scale;
 
-        // Body
+        // Body with outline
         ctx.fillStyle = this.isPlayer ? '#22c55e' : '#dc2626';
         ctx.beginPath();
         ctx.arc(screen.x, screen.y, size, 0, Math.PI * 2);
         ctx.fill();
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.lineWidth = 3;
+        ctx.stroke();
 
         // Eyes
         ctx.fillStyle = 'white';
@@ -400,10 +404,13 @@ class Monster {
             if (game.throwPhase === 'angle' || game.throwPhase === 'power') {
                 const angle = this.isPlayer ? game.angle : (180 - game.angle);
                 const angleRad = angle * Math.PI / 180;
-                const armLength = size * 2;
+                const armLength = size * 3;
 
-                ctx.strokeStyle = 'rgba(255, 215, 0, 0.8)';
-                ctx.lineWidth = 4;
+                // Aiming arm with glow effect
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(255, 215, 0, 0.8)';
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 6;
                 ctx.beginPath();
                 ctx.moveTo(screen.x, screen.y);
                 ctx.lineTo(
@@ -411,23 +418,33 @@ class Monster {
                     screen.y - Math.sin(angleRad) * armLength
                 );
                 ctx.stroke();
+                ctx.shadowBlur = 0;
 
                 // Power indicator
                 if (game.throwPhase === 'power') {
                     const powerPercent = game.power / 100;
-                    const barWidth = size * 3;
-                    const barHeight = size * 0.5;
+                    const barWidth = size * 4;
+                    const barHeight = size * 0.8;
                     const barX = screen.x - barWidth / 2;
-                    const barY = screen.y + size * 2;
+                    const barY = screen.y + size * 2.5;
 
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                    // Background
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                    ctx.fillRect(barX - 2, barY - 2, barWidth + 4, barHeight + 4);
+
+                    ctx.fillStyle = 'rgba(50, 50, 50, 0.9)';
                     ctx.fillRect(barX, barY, barWidth, barHeight);
 
+                    // Power fill with glow
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = `hsl(${powerPercent * 120}, 100%, 50%)`;
                     ctx.fillStyle = `hsl(${powerPercent * 120}, 100%, 50%)`;
                     ctx.fillRect(barX, barY, barWidth * powerPercent, barHeight);
+                    ctx.shadowBlur = 0;
 
+                    // Border
                     ctx.strokeStyle = 'white';
-                    ctx.lineWidth = 2;
+                    ctx.lineWidth = 3;
                     ctx.strokeRect(barX, barY, barWidth, barHeight);
                 }
             }
