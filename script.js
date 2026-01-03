@@ -927,6 +927,15 @@ function vibrate(duration = 10) {
 function setupLevel() {
     const levelConfig = CONFIG.LEVELS[game.currentLevel];
 
+    // Clear all existing game objects
+    game.rock = null;
+    game.particles = [];
+    game.obstacles = [];
+    game.playerHouse = null;
+    game.enemyHouse = null;
+    game.playerMonster = null;
+    game.enemyMonster = null;
+
     generateTerrain();
 
     // Place houses
@@ -1358,9 +1367,14 @@ function nextLevel() {
         game.state = 'victory';
         showScreen('victory-screen');
     } else {
-        // Setup the level BEFORE setting state to playing
-        // This prevents the game loop from processing with old destroyed objects
+        // Pause the game loop during transition
+        const previousState = game.state;
+        game.state = 'transition';
+
+        // Setup the level - this creates all new objects
         setupLevel();
+
+        // Resume the game loop
         game.state = 'playing';
         showScreen(null);
     }
