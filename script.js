@@ -432,6 +432,18 @@ class Monster {
                 ctx.stroke();
                 ctx.shadowBlur = 0;
 
+                // Draw angle text
+                if (game.throwPhase === 'angle' && game.currentTurn === 'player') {
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                    ctx.fillRect(screen.x - size * 2, screen.y - size * 4, size * 4, size * 1.2);
+
+                    ctx.fillStyle = '#ffd700';
+                    ctx.font = `bold ${size * 0.8}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(`${Math.round(game.angle)}°`, screen.x, screen.y - size * 3.4);
+                }
+
                 // Power indicator
                 if (game.throwPhase === 'power') {
                     const powerPercent = game.power / 100;
@@ -458,6 +470,18 @@ class Monster {
                     ctx.strokeStyle = 'white';
                     ctx.lineWidth = 3;
                     ctx.strokeRect(barX, barY, barWidth, barHeight);
+
+                    // Power percentage text
+                    if (game.currentTurn === 'player') {
+                        ctx.fillStyle = 'white';
+                        ctx.font = `bold ${size * 0.6}px Arial`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.strokeStyle = 'black';
+                        ctx.lineWidth = 3;
+                        ctx.strokeText(`${Math.round(game.power)}%`, screen.x, barY + barHeight / 2);
+                        ctx.fillText(`${Math.round(game.power)}%`, screen.x, barY + barHeight / 2);
+                    }
                 }
             }
         }
