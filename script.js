@@ -1363,6 +1363,10 @@ function nextLevel() {
 
 function endGame(victory) {
     if (victory) {
+        // Player wins - celebrate!
+        if (game.playerMonster) game.playerMonster.celebrate();
+        if (game.enemyMonster) game.enemyMonster.takeDamage();
+
         if (game.currentLevel === CONFIG.LEVELS.length - 1) {
             game.state = 'victory';
             showScreen('victory-screen');
@@ -1374,6 +1378,10 @@ function endGame(victory) {
             showScreen('level-complete-screen');
         }
     } else {
+        // Player loses
+        if (game.playerMonster) game.playerMonster.takeDamage();
+        if (game.enemyMonster) game.enemyMonster.celebrate();
+
         game.state = 'defeat';
         showScreen('defeat-screen');
     }
