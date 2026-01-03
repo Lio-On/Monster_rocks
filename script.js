@@ -220,10 +220,14 @@ class Block {
         ctx.fillStyle = color;
         ctx.fillRect(screen.x, screen.y - height, width, height);
 
+        // Add highlight for depth
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.fillRect(screen.x, screen.y - height, width, height * 0.3);
+
         // Damage cracks
         if (healthPercent < 0.7) {
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(screen.x, screen.y - height);
             ctx.lineTo(screen.x + width, screen.y);
@@ -231,8 +235,8 @@ class Block {
         }
 
         // Border
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.lineWidth = 3;
         ctx.strokeRect(screen.x, screen.y - height, width, height);
     }
 
