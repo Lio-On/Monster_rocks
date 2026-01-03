@@ -29,7 +29,7 @@ const CONFIG = {
     LEVELS: [
         {
             name: "Young Challenger",
-            gravity: 12,
+            gravity: 10, // Reduced for easier hitting
             distance: 70,
             obstacleCount: 3,
             oscillationSpeed: 1.5,
@@ -38,7 +38,7 @@ const CONFIG = {
         },
         {
             name: "Warlord of Stone",
-            gravity: 15,
+            gravity: 12, // Reduced for easier hitting
             distance: 90,
             obstacleCount: 6,
             oscillationSpeed: 2.5,
@@ -47,7 +47,7 @@ const CONFIG = {
         },
         {
             name: "King of Anga",
-            gravity: 18,
+            gravity: 15, // Reduced for easier hitting
             distance: 100,
             obstacleCount: 8,
             oscillationSpeed: 3.5,
@@ -1082,7 +1082,7 @@ function doAITurn() {
 
 function simulateShot(angle, power, levelConfig) {
     const angleRad = (180 - angle) * Math.PI / 180;
-    const maxSpeed = 30;
+    const maxSpeed = 45; // Match the actual throw speed
     const speed = (power / 100) * maxSpeed;
 
     let x = game.enemyMonster.x;
@@ -1093,8 +1093,8 @@ function simulateShot(angle, power, levelConfig) {
     const dt = 0.05;
     const maxSteps = 200;
 
-    const targetX = game.playerHouse.x + 3.5;
-    const targetY = game.playerHouse.y + 3;
+    const targetX = game.playerHouse.getCenterX();
+    const targetY = game.playerHouse.getTopY() - 2;
 
     let closestDist = Infinity;
 
